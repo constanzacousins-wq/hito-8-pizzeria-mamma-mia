@@ -1,5 +1,5 @@
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { CartContext } from "../context/CartContext";
 import { UserContext } from "../context/UserContext";
 
@@ -8,6 +8,57 @@ const Cart = () => {
     useContext(CartContext);
 
   const { token } = useContext(UserContext);
+
+  const [mensaje, setMensaje] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Enviar el carrito al backend
+  const handleCheckout = async () => {
+    if (!token) {
+      setError("Debes iniciar sesión para comprar.");
+      return;
+    }
+
+    if (cart.length === 0) {
+      setError("Tu carrito está vacío.");
+      return;
+    }
+
+    setMensaje("");
+    setError("");
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "http://localhost:5000/api/checkouts",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ cart }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data.error || "No se pudo realizar la compra"
+        );
+      }
+
+      setMensaje("¡Compra realizada con éxito! 🍕");
+    } catch (error) {
+      setError(
+        error.message || "Error al procesar la compra"
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="cart">
@@ -20,7 +71,9 @@ const Cart = () => {
           <div className="cart-item" key={pizza.id}>
             <img src={pizza.img} alt={pizza.name} />
 
-            <span className="cart-name">{pizza.name}</span>
+            <span className="cart-name">
+              {pizza.name}
+            </span>
 
             <strong>
               ${pizza.price.toLocaleString("es-CL")}
@@ -49,10 +102,27 @@ const Cart = () => {
 
       <button
         className="pay-button"
-        disabled={!token}
+        onClick={handleCheckout}
+        disabled={!token || cart.length === 0 || loading}
       >
-        Pagar
+        {loading ? "Procesando..." : "Pagar"}
       </button>
+
+      {!token && (
+        <p>Debes iniciar sesión para realizar la compra.</p>
+      )}
+
+      {mensaje && (
+        <p style={{ color: "green", fontWeight: "bold" }}>
+          {mensaje}
+        </p>
+      )}
+
+      {error && (
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

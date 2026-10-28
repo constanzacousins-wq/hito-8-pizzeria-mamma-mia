@@ -1,11 +1,18 @@
-import { useState } from "react";
+
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { register } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password || !confirmPassword) {
@@ -23,7 +30,18 @@ const Register = () => {
       return;
     }
 
-    alert("Registro exitoso");
+    try {
+      setLoading(true);
+
+      await register(email, password);
+
+      alert("Registro exitoso");
+      navigate("/profile");
+    } catch (error) {
+      alert(error.message || "Error al registrar usuario");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -31,31 +49,41 @@ const Register = () => {
       <h2>Registro</h2>
 
       <form onSubmit={handleSubmit}>
-        <label>Email</label>
+        <label htmlFor="register-email">Email</label>
         <input
+          id="register-email"
           type="email"
           placeholder="Ingresa tu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
-        <label>Contraseña</label>
+        <label htmlFor="register-password">Contraseña</label>
         <input
+          id="register-password"
           type="password"
           placeholder="Ingresa tu contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <label>Confirmar contraseña</label>
+        <label htmlFor="confirm-password">
+          Confirmar contraseña
+        </label>
         <input
+          id="confirm-password"
           type="password"
           placeholder="Confirma tu contraseña"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
+          required
         />
 
-        <button type="submit">Registrarse</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registrando..." : "Registrarse"}
+        </button>
       </form>
     </div>
   );

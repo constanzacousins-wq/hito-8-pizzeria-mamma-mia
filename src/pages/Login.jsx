@@ -1,10 +1,17 @@
-import { useState } from "react";
+
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const { login } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email || !password) {
@@ -17,7 +24,18 @@ const Login = () => {
       return;
     }
 
-    alert("Inicio de sesión exitoso");
+    try {
+      setLoading(true);
+
+      await login(email, password);
+
+      alert("Inicio de sesión exitoso");
+      navigate("/profile");
+    } catch (error) {
+      alert(error.message || "Error al iniciar sesión");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -25,23 +43,29 @@ const Login = () => {
       <h2>Login</h2>
 
       <form onSubmit={handleSubmit}>
-        <label>Email</label>
+        <label htmlFor="email">Email</label>
         <input
+          id="email"
           type="email"
           placeholder="Ingresa tu email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
-        <label>Contraseña</label>
+        <label htmlFor="password">Contraseña</label>
         <input
+          id="password"
           type="password"
           placeholder="Ingresa tu contraseña"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          required
         />
 
-        <button type="submit">Login</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Ingresando..." : "Login"}
+        </button>
       </form>
     </div>
   );
