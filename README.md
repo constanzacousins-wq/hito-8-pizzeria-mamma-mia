@@ -4,25 +4,20 @@ Proyecto desarrollado con **React y Vite** para el Bootcamp Full Stack JavaScrip
 
 ## Descripción
 
-En este hito final se implementa la **autenticación real de usuarios mediante JWT (JSON Web Token)**, conectando la aplicación React con un backend desarrollado en Node.js y Express.
-
-Se utiliza Context API para administrar la sesión del usuario, permitiendo registrarse, iniciar sesión, consultar el perfil, cerrar sesión y realizar una simulación de compra.
-
-El proyecto continúa el desarrollo realizado en los hitos anteriores de Pizzería Mamma Mía.
+En este hito final se implementa la **autenticación con JWT**, conectando React con un backend mediante Context API para gestionar usuarios y realizar compras simuladas.
 
 ## Funcionalidades
 
 - Visualización de pizzas desde una API.
-- Consulta de detalles de cada pizza mediante rutas dinámicas y `useParams`.
-- Carrito de compras administrado con Context API.
-- Registro de usuarios mediante `/api/auth/register`.
-- Inicio de sesión mediante `/api/auth/login`.
-- Almacenamiento del token JWT y correo electrónico.
-- Consulta del perfil autenticado mediante `/api/auth/me`.
+- Rutas dinámicas con React Router DOM.
+- Carrito de compras con Context API.
+- Registro e inicio de sesión con JWT.
+- Almacenamiento del token y email del usuario.
+- Visualización del perfil autenticado.
 - Cierre de sesión desde Profile y Navbar.
-- Protección de las rutas Profile, Login y Register.
-- Envío del carrito al backend mediante `/api/checkouts`.
-- Mensaje de confirmación cuando la compra se realiza correctamente.
+- Protección de rutas.
+- Envío del carrito al backend.
+- Mensaje de compra exitosa.
 
 ## Tecnologías
 
@@ -31,61 +26,28 @@ El proyecto continúa el desarrollo realizado en los hitos anteriores de Pizzer�
 - CSS3
 - React Router DOM
 - Context API
+- JWT
 - Vite
-- JWT (JSON Web Token)
-- Fetch API
-- Node.js y Express (backend proporcionado como material de apoyo)
+- Node.js y Express (backend de apoyo)
 
 ## Instalación
 
-### Frontend
-
-Clonar el repositorio e instalar las dependencias:
-
 ```bash
-git clone https://github.com/constanzacousins-wq/hito-8-pizzeria-mamma-mia.git
-cd hito-8-pizzeria-mamma-mia
 npm install
 npm run dev
 ```
 
-La aplicación estará disponible en:
+Para utilizar la autenticación y las compras, el backend debe estar ejecutándose en `http://localhost:5000`.
 
-`http://localhost:5173/hito-8-pizzeria-mamma-mia/`
+## Demo
 
-### Backend
+https://constanzacousins-wq.github.io/hito-8-pizzeria-mamma-mia/
 
-Para utilizar las funcionalidades de autenticación y compra, es necesario ejecutar el backend proporcionado por Desafío Latam.
-
-1. Descargar y descomprimir el material de apoyo Backend Pizzas.
-2. Abrir la carpeta del backend.
-3. Instalar las dependencias con `npm install`.
-4. Iniciar el servidor con `npm run dev`.
-
-El backend debe ejecutarse en:
-
-`http://localhost:5000`
-
-## Endpoints utilizados
-
-| Método | Endpoint | Descripción |
-|---|---|---|
-| POST | `/api/auth/register` | Registrar usuario |
-| POST | `/api/auth/login` | Iniciar sesión |
-| GET | `/api/auth/me` | Obtener perfil autenticado |
-| POST | `/api/checkouts` | Simular compra del carrito |
-
-Las rutas protegidas requieren un token JWT mediante el encabezado `Authorization: Bearer`.
+La demo pública muestra el frontend. Las funciones de autenticación y compra requieren el backend local.
 
 ## Repositorio
 
 https://github.com/constanzacousins-wq/hito-8-pizzeria-mamma-mia
-
-## Demo
-
-Pendiente de publicación en GitHub Pages.
-
-**Nota:** La aplicación requiere un backend ejecutándose en `localhost:5000` para utilizar las funcionalidades de autenticación y compra. La demo estática de GitHub Pages no incluye el backend.
 
 ## Autoría
 
